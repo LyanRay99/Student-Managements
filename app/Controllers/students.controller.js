@@ -3,16 +3,17 @@
  */
 
 const {
-  S_getStudentList,
-  S_getStudentDetail,
-  S_addStudent,
-  S_updateStudent,
-  S_deleteStudent,
+  S_createTask,
+  S_getData,
+  S_getDataDetail,
+  S_updateData,
+  S_deleteData,
 } = require("../Services/student.service");
 
 //* Completed: get data students
-const getStudentList = (req, res) => {
-  const dataStudentList = S_getStudentList();
+const getStudentList = async (req, res) => {
+  const dataStudentList = await S_getData();
+
   if (dataStudentList) {
     res.status(200).send(dataStudentList);
   } else {
@@ -21,9 +22,9 @@ const getStudentList = (req, res) => {
 };
 
 //* Completed: get data detail students
-const getStudentDetail = (req, res) => {
+const getStudentDetail = async (req, res) => {
   const { id } = req.params;
-  const dataStudentDetail = S_getStudentDetail(id);
+  const dataStudentDetail = await S_getDataDetail(id);
   if (dataStudentDetail) {
     res.status(200).send(dataStudentDetail);
   } else {
@@ -32,22 +33,20 @@ const getStudentDetail = (req, res) => {
 };
 
 //* Completed: add data student
-const addStudent = (req, res) => {
+const addStudent = async (req, res) => {
   const { fullName, age, classNumber } = req.body;
-
-  //* check điều kiện nếu ok => truyền parameter vào service để thực hiện thêm
-  const dataStudentList = S_addStudent(fullName, age, classNumber);
-
-  console.log(dataStudentList);
+  const dataStudentList = await S_createTask(fullName, age, classNumber);
   res.status(201).send(dataStudentList);
 };
 
 //* Completed: update data student
-const updateStudent = (req, res) => {
+const updateStudent = async (req, res) => {
   const { id } = req.params;
   const { fullName, age, classNumber } = req.body;
-  const dataStudents = S_updateStudent(id, fullName, age, classNumber);
+  const dataStudents = await S_updateData(id, fullName, age, classNumber);
 
+  console.log(dataStudents);
+  console.log(JSON.stringify(dataStudents, null, 2));
   if (dataStudents) {
     res.status(200).send(dataStudents);
   } else {
@@ -55,9 +54,9 @@ const updateStudent = (req, res) => {
   }
 };
 
-const deleteStudent = (req, res) => {
+const deleteStudent = async (req, res) => {
   const { id } = req.params;
-  const dataStudents = S_deleteStudent(id);
+  const dataStudents = await S_deleteData(id);
 
   if (dataStudents) {
     res.status(200).send(dataStudents);

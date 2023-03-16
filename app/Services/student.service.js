@@ -2,91 +2,77 @@
  * Config services of student list
  */
 
-//* create data
-var studentList = [
-  {
-    id: "1",
-    fullName: "Tai",
-    age: 18,
-    classNumber: 12,
-  },
-  {
-    id: "2",
-    fullName: "Nhi",
-    age: 17,
-    classNumber: 11,
-  },
-];
+const { student } = require("../Models/index");
 
-const S_getStudentList = () => {
-  if (studentList) {
-    return studentList;
-  } else {
-    return false;
-  }
+//* add data
+const S_createTask = async (name, age, classNumber) => {
+  //* Cach 1: build + save
+  // const newTask = StudentList.build({
+  //   name: name,
+  //   age: age,
+  //   classNumber: classNumber,
+  // });
+  // await newTask.save();
+
+  //* Cach 2
+  const newStudent = await student.create({
+    name: name,
+    age: age,
+    classNumber: classNumber,
+  });
+
+  return newStudent;
 };
 
-const S_getStudentDetail = (id) => {
-  const index = studentList.findIndex((item) => item.id == id);
+//* get all data
+const S_getData = async () => await student.findAll();
 
-  if (index !== -1) {
-    console.log(studentList[index]);
-    return studentList[index];
-  } else {
-    return false;
-  }
-};
+const S_getDataDetail = async (id) => {
+  const checkID = await student.findOne({ where: { id } });
 
-const S_addStudent = (fullName, age, classNumber) => {
-  const obj = {
-    id: new Date().toISOString(),
-    fullName,
-    age,
-    classNumber,
-  };
-
-  return (studentList = [...studentList, obj]);
-};
-
-const S_updateStudent = (id, fullName, age, classNumber) => {
-  const index = studentList.findIndex((item) => item.id === id);
-
-  if (index !== -1) {
-    let studentObj = studentList[index];
-
-    studentObj = { ...studentObj, fullName, age, classNumber };
-
-    studentList = studentList.map((item) => {
-      if (item.id === id) {
-        item = studentObj;
-      }
-
-      return item;
+  if (checkID) {
+    return await student.findOne({
+      where: {
+        id,
+      },
     });
-
-    return studentList;
   } else {
     return false;
   }
 };
 
-const S_deleteStudent = (id) => {
-  // const student = studentList.find((student) => student.id == id);
-  const index = studentList.findIndex((item) => item.id === id);
+const S_updateData = async (id, name, age, classNumber) => {
+  const checkID = await student.findOne({ where: { id } });
 
-  if (index !== -1) {
-    studentList = studentList.filter((student) => student.id !== id);
-
-    return studentList;
+  if (checkID) {
+    return await student.update(
+      {
+        name: name,
+        age: age,
+        classNumber: classNumber,
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
   } else {
     return false;
   }
 };
+
+const S_deleteData = async (id) =>
+  await student.destroy({
+    where: {
+      id: id,
+    },
+  });
 
 module.exports = {
-  S_getStudentList,
-  S_getStudentDetail,
-  S_addStudent,
-  S_updateStudent,
-  S_deleteStudent,
+  S_createTask,
+  S_getData,
+  S_getDataDetail,
+  S_updateData,
+  S_deleteData,
 };
