@@ -34,16 +34,17 @@ const getStudentDetail = async (req, res) => {
 
 //* Completed: add data student
 const addStudent = async (req, res) => {
-  const { fullName, age, classNumber } = req.body;
-  const dataStudentList = await S_createTask(fullName, age, classNumber);
+  const { fullName, age, numberClass } = req.body;
+  const dataStudentList = await S_createTask(fullName, age, numberClass);
+  // res.status(201).send(JSON.stringify(dataStudentList, null, 2));
   res.status(201).send(dataStudentList);
 };
 
 //* Completed: update data student
 const updateStudent = async (req, res) => {
   const { id } = req.params;
-  const { fullName, age, classNumber } = req.body;
-  const dataStudents = await S_updateData(id, fullName, age, classNumber);
+  const { fullName, age, numberClass } = req.body;
+  const dataStudents = await S_updateData(id, fullName, age, numberClass);
 
   console.log(dataStudents);
   console.log(JSON.stringify(dataStudents, null, 2));
@@ -58,8 +59,9 @@ const deleteStudent = async (req, res) => {
   const { id } = req.params;
   const dataStudents = await S_deleteData(id);
 
+  console.log(dataStudents);
   if (dataStudents) {
-    res.status(200).send(dataStudents);
+    res.status(200).send(`da xoa id: ${id}`);
   } else {
     res.status(404).send(`ko co id ${id} trong list`);
   }

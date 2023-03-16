@@ -5,7 +5,7 @@ const createStudentModel = (sequelize) => {
   const student = sequelize.define(
     "students", //* Model name (table)
     {
-      name: {
+      fullName: {
         type: DataTypes.STRING, //* khai báo type
         allowNull: false, //* Not null
       },
@@ -13,7 +13,7 @@ const createStudentModel = (sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      classNumber: {
+      numberClass: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },

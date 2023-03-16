@@ -5,7 +5,7 @@
 const { student } = require("../Models/index");
 
 //* add data
-const S_createTask = async (name, age, classNumber) => {
+const S_createTask = async (fullName, age, numberClass) => {
   //* Cach 1: build + save
   // const newTask = StudentList.build({
   //   name: name,
@@ -16,9 +16,9 @@ const S_createTask = async (name, age, classNumber) => {
 
   //* Cach 2
   const newStudent = await student.create({
-    name: name,
+    fullName: fullName,
     age: age,
-    classNumber: classNumber,
+    numberClass: numberClass,
   });
 
   return newStudent;
@@ -41,15 +41,15 @@ const S_getDataDetail = async (id) => {
   }
 };
 
-const S_updateData = async (id, name, age, classNumber) => {
+const S_updateData = async (id, fullName, age, numberClass) => {
   const checkID = await student.findOne({ where: { id } });
 
   if (checkID) {
     return await student.update(
       {
-        name: name,
+        fullName: fullName,
         age: age,
-        classNumber: classNumber,
+        numberClass: numberClass,
       },
       {
         where: {
@@ -62,12 +62,18 @@ const S_updateData = async (id, name, age, classNumber) => {
   }
 };
 
-const S_deleteData = async (id) =>
-  await student.destroy({
-    where: {
-      id: id,
-    },
-  });
+const S_deleteData = async (id) => {
+  const checkID = await student.findOne({ where: { id } });
+  if (checkID) {
+    return await student.destroy({
+      where: {
+        id: id,
+      },
+    });
+  } else {
+    return false;
+  }
+};
 
 module.exports = {
   S_createTask,
